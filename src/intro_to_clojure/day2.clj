@@ -32,3 +32,13 @@
 (comment
   (from-pantry? :sugar)
   (from-pantry? :lemon))
+
+(def fridge-ingredients #{:almond-milk
+                          :lemon})
+
+(defn from-fridge? [ingredient]
+  (contains? fridge-ingredients ingredient))
+
+(comment
+  (from-fridge? :flour)
+  (from-fridge? :lemon))
