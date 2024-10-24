@@ -42,3 +42,18 @@
 (comment
   (from-fridge? :flour)
   (from-fridge? :lemon))
+
+(def scooped-ingredients #{:flour
+                           :almond-milk
+                           :sugar
+                           :coconut-oil
+                           :baking-powder
+                           :corn-starch})
+
+(defn scooped? [ingredient]
+  (contains? scooped-ingredients ingredient))
+
+(def squeezed-ingredients #{:lemon})
+
+(defn squeezed? [ingredient]
+  (contains? squeezed-ingredients ingredient))
