@@ -10,3 +10,25 @@
 
 
   (robot/status))
+
+(comment
+
+  #{1 2 3}
+  #{1 2 :hello "hello"}
+
+  (contains? #{1 2 3} :hello)
+
+  #{1 2 3 4 5 6 7 8 9})
+
+(def pantry-ingredients #{:flour
+                          :sugar
+                          :corn-starch
+                          :baking-powder
+                          :coconut-oil})
+
+(defn from-pantry? [ingredient]
+  (contains? pantry-ingredients ingredient))
+
+(comment
+  (from-pantry? :sugar)
+  (from-pantry? :lemon))
