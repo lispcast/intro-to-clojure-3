@@ -57,3 +57,27 @@
 
 (defn squeezed? [ingredient]
   (contains? squeezed-ingredients ingredient))
+
+(defn fetch-ingredient
+  ([ingredient]
+   (fetch-ingredient ingredient 1))
+  ([ingredient amount]
+   (cond
+     (from-pantry? ingredient)
+     (robot/go-to :pantry)
+     (from-fridge? ingredient)
+     (robot/go-to :fridge)
+     :else
+     (robot/error "I don't know where to find" ingredient))
+   (dotimes [_ amount]
+     (robot/load-up ingredient))
+   (robot/go-to :prep-area)
+   (dotimes [_ amount]
+     (robot/unload ingredient))))
+
+(comment
+  (robot/status)
+  (robot/start-over)
+  (fetch-ingredient :flour 10)
+  (fetch-ingredient :almond-milk 20)
+  (fetch-ingredient :fdsfsfs))
