@@ -106,3 +106,7 @@
 
   (doseq [ingredient fridge-ingredients]
     (println "I like" ingredient)))
+
+(comment
+
+  (robot/get-morning-orders))
