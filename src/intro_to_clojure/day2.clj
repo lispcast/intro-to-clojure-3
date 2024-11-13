@@ -81,3 +81,28 @@
   (fetch-ingredient :flour 10)
   (fetch-ingredient :almond-milk 20)
   (fetch-ingredient :fdsfsfs))
+
+(comment
+
+  {}
+  {:name "Eric"
+   :age 43
+   :age-next-year 44
+   :a 4
+   :b 5
+   :c 6
+   :d 8
+   :e 9
+   :f 10
+   :g 11
+   :y 12}
+
+  [1 2 3 4]
+  (rest (rest (rest (rest (seq [1 2 3 4])))))
+  (first [1 2 3 4])
+  (first (rest #{1 2 3 4 5 6}))
+  (seq {:a 1 :b 2 :c 3})
+  (seq "Hello, World!")
+
+  (doseq [ingredient fridge-ingredients]
+    (println "I like" ingredient)))
