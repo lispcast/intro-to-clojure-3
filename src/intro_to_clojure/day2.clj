@@ -75,12 +75,46 @@
    (dotimes [_ amount]
      (robot/unload ingredient))))
 
+(defn fetch-ingredients [ingredient-list]
+  ;; go to pantry
+  (robot/go-to :pantry)
+  ;; load up everything
+  (doseq [ingredient-pair ingredient-list
+          :let [ingredient-name (get ingredient-pair 0)
+                ingredient-quantity (get ingredient-pair 1)]]
+    (when (from-pantry? ingredient-name)
+      (dotimes [_ ingredient-quantity]
+        (robot/load-up ingredient-name))))
+
+  ;; go to fridge
+  (robot/go-to :fridge)
+  ;; load up everything
+  (doseq [ingredient-pair ingredient-list
+          :let [ingredient-name (get ingredient-pair 0)
+                ingredient-quantity (get ingredient-pair 1)]]
+    (when (from-fridge? ingredient-name)
+      (dotimes [_ ingredient-quantity]
+        (robot/load-up ingredient-name))))
+
+  ;; go to prep area
+  (robot/go-to :prep-area)
+  ;; unload everything
+  (doseq [ingredient-pair ingredient-list
+          :let [ingredient-name (get ingredient-pair 0)
+                ingredient-quantity (get ingredient-pair 1)]]
+    (dotimes [_ ingredient-quantity]
+      (robot/unload ingredient-name))))
+
 (comment
   (robot/status)
   (robot/start-over)
   (fetch-ingredient :flour 10)
   (fetch-ingredient :almond-milk 20)
-  (fetch-ingredient :fdsfsfs))
+  (fetch-ingredient :fdsfsfs)
+
+  (fetch-ingredients {:flour 10
+                      :sugar 22
+                      :almond-milk 2}))
 
 (comment
 
