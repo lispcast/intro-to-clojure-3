@@ -105,6 +105,9 @@
     (dotimes [_ ingredient-quantity]
       (robot/unload ingredient-name))))
 
+(defn add-ingredients [list1 list2]
+  (merge-with + list1 list2))
+
 (comment
   (robot/status)
   (robot/start-over)
@@ -114,7 +117,12 @@
 
   (fetch-ingredients {:flour 10
                       :sugar 22
-                      :almond-milk 2}))
+                      :almond-milk 2})
+
+  (add-ingredients {:flour 10
+                    :sugar 22}
+                   {:flour 4
+                    :almond-milk 2}))
 
 (comment
 
