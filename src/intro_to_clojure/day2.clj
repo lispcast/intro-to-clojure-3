@@ -153,16 +153,16 @@
         (dotimes [_ item-count])))))
 
 (defn fetch-for-cake []
-  (fetch-ingredient :flour 2)
-  (fetch-ingredient :baking-powder)
-  (fetch-ingredient :almond-milk)
-  (fetch-ingredient :sugar))
+  (fetch-ingredients {:flour 2
+                      :baking-powder 1
+                      :almond-milk 1
+                      :sugar 1}))
 
 (defn fetch-for-cookies []
-  (fetch-ingredient :flour)
-  (fetch-ingredient :corn-starch)
-  (fetch-ingredient :sugar)
-  (fetch-ingredient :coconut-oil))
+  (fetch-ingredients {:flour 1
+                      :corn-starch 1
+                      :sugar 1
+                      :coconut-oil 1}))
 
 (comment
   (fetch-for-cake)
