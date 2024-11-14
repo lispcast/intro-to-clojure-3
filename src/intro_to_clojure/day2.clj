@@ -198,3 +198,21 @@
   (robot/start-over)
   (day-at-the-bakery)
   (day1/bake-cake))
+
+(comment
+
+  (merge-with + {} {})
+  (merge-with + {:flour 1} {})
+  (merge-with + {:flour 1} {:sugar 2})
+  (merge-with + {:flour 1} {:sugar 2
+                            :flour 4})
+
+  (merge-with + {:flour 3} {:sugar 2
+                            :flour 4})
+
+  (merge {:flour 1} {:sugar 2 :flour 4})
+
+  (str "a" "b")
+
+  (merge-with str {:flour 3} {:sugar 2
+                              :flour 4}))
