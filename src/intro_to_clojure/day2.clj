@@ -109,4 +109,58 @@
 
 (comment
 
-  (robot/get-morning-orders))
+  (let [orders (robot/get-morning-orders)
+        order (first orders)
+        items (get order :items)]
+    (println order)
+    (doseq [item-pair items]
+      (let [item-name (get item-pair 0)
+            item-count (get item-pair 1)]
+        (dotimes [_ item-count])))))
+
+(defn fetch-for-cake []
+  (fetch-ingredient :flour 2)
+  (fetch-ingredient :baking-powder)
+  (fetch-ingredient :almond-milk)
+  (fetch-ingredient :sugar))
+
+(defn fetch-for-cookies []
+  (fetch-ingredient :flour)
+  (fetch-ingredient :corn-starch)
+  (fetch-ingredient :sugar)
+  (fetch-ingredient :coconut-oil))
+
+(comment
+  (fetch-for-cake)
+  (fetch-for-cookies))
+
+(defn day-at-the-bakery []
+  ;; get-morning-orders
+  (let [orders (robot/get-morning-orders)]
+    (doseq [order orders]
+      (doseq [item-pair (get order :items)]
+        (let [item-name (get item-pair 0)
+              item-count (get item-pair 1)]
+          (dotimes [_ item-count]
+            (cond
+              (= :cake item-name)
+              (do
+                (fetch-for-cake)
+                (let [cooling-rack-id (day1/bake-cake)]
+                  (robot/delivery {:orderid (get order :orderid)
+                                   :address (get order :address)
+                                   :rackids [cooling-rack-id]})))
+              (= :cookies item-name)
+              (do
+                (fetch-for-cookies)
+                (let [cooling-rack-id (day1/bake-cookies)]
+                  (robot/delivery {:orderid (get order :orderid)
+                                   :address (get order :address)
+                                   :rackids [cooling-rack-id]})))
+              :else
+              (robot/error "I don't know how to fetch ingredients for" item-name))))))))
+
+(comment
+  (robot/start-over)
+  (day-at-the-bakery)
+  (day1/bake-cake))
