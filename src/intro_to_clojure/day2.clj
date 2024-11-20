@@ -125,6 +125,16 @@
                     :almond-milk 2}))
 
 (comment
+  (update-vals {} inc)
+  (update-vals {:a 1} inc)
+  (update-vals {:a 1 :b 2} inc))
+
+
+
+
+
+
+(comment
 
   {}
   {:name "Eric"
