@@ -108,6 +108,9 @@
 (defn add-ingredients [list1 list2]
   (merge-with + list1 list2))
 
+(defn multiply-ingredients [quantity ingredient-list]
+  (update-vals ingredient-list (fn [x] (* quantity x))))
+
 (comment
   (robot/status)
   (robot/start-over)
@@ -122,7 +125,12 @@
   (add-ingredients {:flour 10
                     :sugar 22}
                    {:flour 4
-                    :almond-milk 2}))
+                    :almond-milk 2})
+
+  (multiply-ingredients 4 {:sugar 2})
+  (multiply-ingredients 10 {:flour 22 :almond-milk 3})
+  (multiply-ingredients 1 {:sugar 3})
+  (multiply-ingredients 10 {}))
 
 (comment
   (update-vals {} inc)
