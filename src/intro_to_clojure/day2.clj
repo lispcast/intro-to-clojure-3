@@ -127,7 +127,12 @@
 (comment
   (update-vals {} inc)
   (update-vals {:a 1} inc)
-  (update-vals {:a 1 :b 2} inc))
+  (update-vals {:a 1 :b 2} inc)
+
+  (let [double (fn [x] (* 2 x))]
+    (double 10))
+
+  (update-vals {:a 3 :b 1} (fn [x] (* 10 x))))
 
 
 
