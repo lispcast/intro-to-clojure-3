@@ -58,6 +58,16 @@
 (defn squeezed? [ingredient]
   (contains? squeezed-ingredients ingredient))
 
+(def cake-ingredients {:flour 2
+                       :baking-powder 1
+                       :almond-milk 1
+                       :sugar 1})
+
+(def cookie-ingredients {:flour 1
+                         :corn-starch 1
+                         :sugar 1
+                         :coconut-oil 1})
+
 (defn fetch-ingredient
   ([ingredient]
    (fetch-ingredient ingredient 1))
@@ -111,6 +121,11 @@
 (defn multiply-ingredients [quantity ingredient-list]
   (update-vals ingredient-list (fn [x] (* quantity x))))
 
+(defn order->ingredients [order]
+  (add-ingredients
+   (multiply-ingredients (get (get order :items) :cake) cake-ingredients)
+   (multiply-ingredients (get (get order :items) :cookies) cookie-ingredients)))
+
 (comment
   (robot/status)
   (robot/start-over)
@@ -130,7 +145,9 @@
   (multiply-ingredients 4 {:sugar 2})
   (multiply-ingredients 10 {:flour 22 :almond-milk 3})
   (multiply-ingredients 1 {:sugar 3})
-  (multiply-ingredients 10 {}))
+  (multiply-ingredients 10 {})
+
+  (order->ingredients {:items {:cake 10 :cookies 1}}))
 
 (comment
   (update-vals {} inc)
@@ -184,16 +201,10 @@
         (dotimes [_ item-count])))))
 
 (defn fetch-for-cake []
-  (fetch-ingredients {:flour 2
-                      :baking-powder 1
-                      :almond-milk 1
-                      :sugar 1}))
+  (fetch-ingredients cake-ingredients))
 
 (defn fetch-for-cookies []
-  (fetch-ingredients {:flour 1
-                      :corn-starch 1
-                      :sugar 1
-                      :coconut-oil 1}))
+  (fetch-ingredients cookie-ingredients))
 
 (comment
   (fetch-for-cake)
