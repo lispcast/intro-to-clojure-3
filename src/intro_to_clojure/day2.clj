@@ -258,3 +258,16 @@
 
   (merge-with str {:flour 3} {:sugar 2
                               :flour 4}))
+
+
+(comment
+  (inc 11)
+  (map inc [1 2 3 4 5 6])
+  (map str [1 2 3 4 5 6])
+  (let [orders [{:items {:cake 2
+                         :cookies 1}}
+                {:items {:cake 3
+                         :cookies 1}}
+                {:items {:cake 1
+                         :cookies 1}}]]
+    (map order->ingredients orders)))
