@@ -110,3 +110,11 @@
 (comment
 
   (robot/get-morning-orders))
+
+(comment
+
+  (let [x 1
+        y 2
+        z (+ x y)
+        a 1]
+    (+ a y (* z x))))
