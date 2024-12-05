@@ -1,3 +1,3 @@
 {:deps {org.clojure/clojure {:mvn/version "1.12.0"}
         lispcast/bakery2 {:git/url "https://github.com/lispcast/bakery2"
-                          :git/sha "162db7fe7aaac39a3e4715450d1e31b9aa50d6eb"}}}
+                          :git/sha "3be374807f4f686c14f2500ef98a40763a06f1f2"}}}
