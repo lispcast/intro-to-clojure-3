@@ -271,3 +271,13 @@
                 {:items {:cake 1
                          :cookies 1}}]]
     (map order->ingredients orders)))
+
+(comment
+
+  (reduce + 0 [1 1 2])
+  (str 1 1)
+  (reduce str "" [1 2 3 4 5 6])
+
+  (reduce + 0 [])
+
+  (reduce add-ingredients {} [{:flour 1} {:sugar 2 :flour 2}]))
