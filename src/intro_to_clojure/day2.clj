@@ -220,8 +220,6 @@
   (let [orders (robot/get-morning-orders)
         ingredients (orders->ingredients orders)]
     (fetch-ingredients ingredients)
-    (doseq [order orders]
-      (let []))
     (doseq [order orders
             item-pair (get order :items)
             :let [item-name (get item-pair 0)
