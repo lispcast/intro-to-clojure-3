@@ -220,6 +220,8 @@
   (let [orders (robot/get-morning-orders)
         ingredients (orders->ingredients orders)]
     (fetch-ingredients ingredients)
+    (doseq [order orders]
+      (let []))
     (doseq [order orders
             item-pair (get order :items)
             :let [item-name (get item-pair 0)
@@ -290,4 +292,9 @@
 
   (range 10)
   (range 0)
-  (range 0 100 2))
+  (range 0 100 2)
+
+  (concat)
+  (concat [1 2])
+  (concat [:a :b] [1 2])
+  (concat [:a :b] [1 2] (map str (range 2))))
