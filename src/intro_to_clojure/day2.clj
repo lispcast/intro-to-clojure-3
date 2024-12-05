@@ -123,8 +123,8 @@
 
 (defn order->ingredients [order]
   (add-ingredients
-   (multiply-ingredients (get (get order :items) :cake) cake-ingredients)
-   (multiply-ingredients (get (get order :items) :cookies) cookie-ingredients)))
+   (multiply-ingredients (get (get order :items) :cake 0) cake-ingredients)
+   (multiply-ingredients (get (get order :items) :cookies 0) cookie-ingredients)))
 
 (defn orders->ingredients [orders]
   (reduce add-ingredients {} (map order->ingredients orders)))
@@ -150,7 +150,7 @@
   (multiply-ingredients 1 {:sugar 3})
   (multiply-ingredients 10 {})
 
-  (order->ingredients {:items {:cake 10 :cookies 1}})
+  (order->ingredients {:items {:cake 10}})
 
   (orders->ingredients [{:items {:cake 10 :cookies 1}}
                         {:items {:cake 2 :cookies 21}}]))
@@ -285,3 +285,9 @@
   (reduce + 0 [])
 
   (reduce add-ingredients {} [{:flour 1} {:sugar 2 :flour 2}]))
+
+(comment
+
+  (range 10)
+  (range 0)
+  (range 0 100 2))
