@@ -126,6 +126,9 @@
    (multiply-ingredients (get (get order :items) :cake) cake-ingredients)
    (multiply-ingredients (get (get order :items) :cookies) cookie-ingredients)))
 
+(defn orders->ingredients [orders]
+  (reduce add-ingredients {} (map order->ingredients orders)))
+
 (comment
   (robot/status)
   (robot/start-over)
@@ -147,7 +150,10 @@
   (multiply-ingredients 1 {:sugar 3})
   (multiply-ingredients 10 {})
 
-  (order->ingredients {:items {:cake 10 :cookies 1}}))
+  (order->ingredients {:items {:cake 10 :cookies 1}})
+
+  (orders->ingredients [{:items {:cake 10 :cookies 1}}
+                        {:items {:cake 2 :cookies 21}}]))
 
 (comment
   (update-vals {} inc)
