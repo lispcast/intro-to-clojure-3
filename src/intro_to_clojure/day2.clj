@@ -220,25 +220,20 @@
   (let [orders (robot/get-morning-orders)
         ingredients (orders->ingredients orders)]
     (fetch-ingredients ingredients)
-    (doseq [order orders
-            item-pair (get order :items)
-            :let [item-name (get item-pair 0)
-                  item-count (get item-pair 1)]]
-      (dotimes [_ item-count]
-        (cond
-          (= :cake item-name)
-          (let [cooling-rack-id (day1/bake-cake)]
-            (robot/delivery {:orderid (get order :orderid)
-                             :address (get order :address)
-                             :rackids [cooling-rack-id]}))
-
-          (= :cookies item-name)
-          (let [cooling-rack-id (day1/bake-cookies)]
-            (robot/delivery {:orderid (get order :orderid)
-                             :address (get order :address)
-                             :rackids [cooling-rack-id]}))
-          :else
-          (robot/error "I don't know how to fetch ingredients for" item-name))))))
+    (doseq [order orders]
+      (let [items (get order :items)
+            cake-count (get items :cake 0)
+            cookies-count (get items :cookies 0)
+            cooling-rack-ids (concat
+                              (map (fn [_]
+                                     (day1/bake-cake))
+                                   (range cake-count))
+                              (map (fn [_]
+                                     (day1/bake-cookies))
+                                   (range cookies-count)))]
+        (robot/delivery {:orderid (get order :orderid)
+                         :address (get order :address)
+                         :rackids cooling-rack-ids})))))
 
 (comment
   (robot/start-over)
