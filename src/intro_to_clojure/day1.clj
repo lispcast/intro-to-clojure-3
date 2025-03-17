@@ -53,7 +53,7 @@
        (robot/grab ingredient)
        (robot/squeeze (bowl-for ingredient))
        (robot/release))
-     (robot/error ingredient "is not scooped."))))
+     (robot/error ingredient "is not squeezed"))))
 
 (defn add-scooped
   ([ingredient]
@@ -66,7 +66,7 @@
          (robot/scoop ingredient)
          (robot/dump (bowl-for ingredient)))
        (robot/release))
-     (robot/error ingredient "is not squeezed?"))))
+     (robot/error ingredient "is not scooped"))))
 
 (defn add
   ([ingredient]
@@ -111,3 +111,5 @@
   (robot/bake-pan 30)
 
   (robot/cool-pan))
+
+(defn bake-)
