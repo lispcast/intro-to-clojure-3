@@ -1,6 +1,24 @@
 (ns intro-to-clojure.day3
   (:require [bakery.robot :as robot]))
 
+(def database {:recipes {:cake {:ingredients {:flour 2
+                                              :baking-powder 1
+                                              :almond-milk 1
+                                              :sugar 1}
+                                :steps [[:add :flour]
+                                        [:add :baking-powder]
+                                        [:add :almond-milk]
+                                        [:add :sugar]
+
+                                        [:mix :dry]
+                                        [:mix :wet]
+                                        [:pour :wet :dry]
+                                        [:mix :dry]
+                                        [:pour :dry :pan]
+                                        [:bake 25]
+
+                                        [:cool]]}}})
+
 (def pantry-ingredients #{:flour
                           :sugar
                           :corn-starch
