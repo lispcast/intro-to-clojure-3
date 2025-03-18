@@ -149,57 +149,6 @@
      :else
      (robot/error "I don't know how to add" ingredient))))
 
-(defn bake-cake []
-  (add :flour 2)
-  (add :baking-powder)
-  (add :almond-milk)
-  (add :sugar)
-
-  (robot/mix-bowl :dry)
-  (robot/mix-bowl :wet)
-  (robot/pour-bowl :wet :dry)
-  (robot/mix-bowl :dry)
-  (robot/pour-bowl :dry :pan)
-  (robot/bake-pan 25)
-
-  (robot/cool-pan))
-
-(defn bake-cookies []
-  (add :flour)
-  (add :corn-starch)
-  (add :sugar)
-  (add :coconut-oil)
-
-  (robot/mix-bowl :dry)
-  (robot/mix-bowl :wet)
-  (robot/pour-bowl :wet :dry)
-  (robot/mix-bowl :dry)
-  (robot/pour-bowl :dry :pan)
-  (robot/bake-pan 30)
-
-  (robot/cool-pan))
-
-(defn bake-brownies []
-  (add :coconut-oil 2)
-  (add :cocoa 2)
-  (add :sugar 1)
-  (robot/mix-bowl :wet)
-
-  (add :almond-milk)
-  (robot/mix-bowl :wet)
-
-  (add :flour 2)
-  (robot/pour-bowl :wet :dry)
-  (robot/mix-bowl :dry)
-  (robot/pour-bowl :dry :pan)
-  (robot/bake-pan 35)
-  (robot/cool-pan))
-
-(comment
-  (robot/start-over)
-  (bake-brownies)
-  (robot/status))
-
 (def cake-ingredients {:flour 2
                        :baking-powder 1
                        :almond-milk 1
@@ -271,25 +220,6 @@
 (defn orders->ingredients [orders]
   (reduce add-ingredients {} (map order->ingredients orders)))
 
-(defn day-at-the-bakery []
-  (let [orders (robot/get-morning-orders)
-        ingredients (orders->ingredients orders)]
-    (fetch-ingredients ingredients)
-    (doseq [order orders]
-      (let [items (get order :items)
-            cake-count (get items :cake 0)
-            cookies-count (get items :cookies 0)
-            cooling-rack-ids (concat
-                              (map (fn [_]
-                                     (bake-cake))
-                                   (range cake-count))
-                              (map (fn [_]
-                                     (bake-cookies))
-                                   (range cookies-count)))]
-        (robot/delivery {:orderid (get order :orderid)
-                         :address (get order :address)
-                         :rackids cooling-rack-ids})))))
-
 (defn perform [ingredients step]
   (let [operation (first step)]
     (cond
@@ -324,6 +254,25 @@
         steps       (:steps       recipe)]
     (last (map (fn [step] (perform ingredients step)) steps))))
 
+(defn day-at-the-bakery []
+  (let [orders (robot/get-morning-orders)
+        ingredients (orders->ingredients orders)]
+    (fetch-ingredients ingredients)
+    (doseq [order orders]
+      (let [items (:items order)
+            cooling-rack-ids (mapcat (fn [[item quantity]]
+                                       (map (fn [_]
+                                              (bake-recipe (get-in database [:recipes item])))
+                                            (range quantity)))
+                                     items)]
+        (prn cooling-rack-ids)
+        (robot/delivery {:orderid (:orderid order)
+                         :address (:address order)
+                         :rackids cooling-rack-ids})))))
+
+(comment
+  (day-at-the-bakery))
+
 (comment
 
   (perform {} [:cool])
@@ -336,5 +285,5 @@
   (perform cake-ingredients [:add :flour])
   (perform cake-ingredients [:add :flour 3])
 
-  (bake-recipe (get-in database [:recipes :cake]))
+  (bake-recipe (get-in database [:recipes :cookies]))
   (robot/status))
