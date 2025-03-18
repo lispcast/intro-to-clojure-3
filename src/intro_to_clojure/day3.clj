@@ -281,6 +281,11 @@
         (= 3 (count step))
         (add (second step) (get step 2))))))
 
+(defn bake-recipe [recipe]
+  (let [ingredients (:ingredients recipe)
+        steps       (:steps       recipe)]
+    (last (map (fn [step] (perform ingredients step)) steps))))
+
 (comment
 
   (perform {} [:cool])
@@ -292,4 +297,6 @@
   (perform cake-ingredients [:add :all])
   (perform cake-ingredients [:add :flour])
   (perform cake-ingredients [:add :flour 3])
+
+  (bake-recipe (get-in database [:recipes :cake]))
   (robot/status))
