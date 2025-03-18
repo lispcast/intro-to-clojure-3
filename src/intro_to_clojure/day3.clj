@@ -271,7 +271,10 @@
                          :rackids cooling-rack-ids})))))
 
 (comment
-  (day-at-the-bakery))
+  (day-at-the-bakery)
+
+  (map range [1 2 3])
+  (mapcat range [1 2 3]))
 
 (comment
 
