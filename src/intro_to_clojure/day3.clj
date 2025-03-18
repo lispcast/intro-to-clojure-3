@@ -5,6 +5,7 @@
                           :sugar
                           :corn-starch
                           :baking-powder
+                          :cocoa
                           :coconut-oil})
 
 (defn from-pantry? [ingredient]
@@ -21,34 +22,38 @@
                            :sugar
                            :coconut-oil
                            :baking-powder
+                           :cocoa
                            :corn-starch})
 
 (defn scooped? [ingredient]
   (contains? scooped-ingredients ingredient))
+
+(comment
+
+  (from-pantry? :cocoa)
+  (scooped? :cocoa))
 
 (def squeezed-ingredients #{:lemon})
 
 (defn squeezed? [ingredient]
   (contains? squeezed-ingredients ingredient))
 
+(def wet-ingredients #{:almond-milk :sugar :coconut-oil :lemon-juice :cocoa})
+(def dry-ingredients #{:flour :corn-starch :baking-powder})
+
 (defn bowl-for [ingredient]
   (cond
-    (= :flour ingredient)
+    (contains? wet-ingredients ingredient)
+    :wet
+
+    (contains? dry-ingredients ingredient)
     :dry
-    (= :corn-starch ingredient)
-    :dry
-    (= :baking-powder ingredient)
-    :dry
-    (= :almond-milk ingredient)
-    :wet
-    (= :sugar ingredient)
-    :wet
-    (= :coconut-oil ingredient)
-    :wet
-    (= :lemon-juice ingredient)
-    :wet
+
     :else
     (robot/error "I don't recognize" ingredient)))
+
+(comment
+  (bowl-for :cocoa))
 
 (defn add-squeezed
   ([ingredient]
@@ -117,6 +122,11 @@
   (robot/bake-pan 30)
 
   (robot/cool-pan))
+
+(comment
+  (robot/start-over)
+  (bake-cake)
+  (robot/status))
 
 (def cake-ingredients {:flour 2
                        :baking-powder 1
