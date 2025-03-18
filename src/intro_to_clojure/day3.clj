@@ -17,7 +17,45 @@
                                         [:pour :dry :pan]
                                         [:bake 25]
 
-                                        [:cool]]}}})
+                                        [:cool]]}
+
+                         :cookies {:ingredients {:flour 1
+                                                 :corn-starch 1
+                                                 :sugar 1
+                                                 :coconut-oil 1}
+                                   :steps [[:add :flour]
+                                           [:add :corn-starch]
+                                           [:add :sugar]
+                                           [:add :coconut-oil]
+
+                                           [:mix :dry]
+                                           [:mix :wet]
+                                           [:pour :wet :dry]
+                                           [:mix :dry]
+                                           [:pour :dry :pan]
+                                           [:bake 30]
+
+                                           [:cool]]}
+
+                         :brownies {:ingredients {:coconut-oil 2
+                                                  :cocoa 2
+                                                  :sugar 1
+                                                  :almond-milk 1
+                                                  :flour 2}
+                                    :steps [[:add :coconut-oil]
+                                            [:add :cocoa]
+                                            [:add :sugar]
+                                            [:mix :wet]
+
+                                            [:add :almond-milk]
+                                            [:mix :wet]
+
+                                            [:add :flour]
+                                            [:pour :wet :dry]
+                                            [:mix :dry]
+                                            [:pour :dry :pan]
+                                            [:bake 35]
+                                            [:cool]]}}})
 
 (def pantry-ingredients #{:flour
                           :sugar
