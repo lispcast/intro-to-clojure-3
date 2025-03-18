@@ -233,3 +233,13 @@
         (robot/delivery {:orderid (get order :orderid)
                          :address (get order :address)
                          :rackids cooling-rack-ids})))))
+
+(defn perform [step]
+  (let [operation (first step)]
+    (cond
+      (= :cool operation)
+      (robot/cool-pan))))
+
+(comment
+
+  (perform [:cool]))
