@@ -123,9 +123,25 @@
 
   (robot/cool-pan))
 
+(defn bake-brownies []
+  (add :coconut-oil 2)
+  (add :cocoa 2)
+  (add :sugar 1)
+  (robot/mix-bowl :wet)
+
+  (add :almond-milk)
+  (robot/mix-bowl :wet)
+
+  (add :flour 2)
+  (robot/pour-bowl :wet :dry)
+  (robot/mix-bowl :dry)
+  (robot/pour-bowl :dry :pan)
+  (robot/bake-pan 35)
+  (robot/cool-pan))
+
 (comment
   (robot/start-over)
-  (bake-cake)
+  (bake-brownies)
   (robot/status))
 
 (def cake-ingredients {:flour 2
