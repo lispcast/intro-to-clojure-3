@@ -238,7 +238,10 @@
   (let [operation (first step)]
     (cond
       (= :cool operation)
-      (robot/cool-pan))))
+      (robot/cool-pan)
+
+      (= :mix operation)
+      (robot/mix-bowl (second step)))))
 
 (comment
 
