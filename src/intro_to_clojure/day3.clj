@@ -241,8 +241,17 @@
       (robot/cool-pan)
 
       (= :mix operation)
-      (robot/mix-bowl (second step)))))
+      (robot/mix-bowl (second step))
+
+      (= :pour operation)
+      (robot/pour-bowl (second step) (get step 2))
+
+      (= :bake operation)
+      (robot/bake-pan (second step)))))
 
 (comment
 
-  (perform [:cool]))
+  (perform [:cool])
+  (perform [:mix :dry])
+  (perform [:pour :wet :dry])
+  (perform [:bake 45]))
