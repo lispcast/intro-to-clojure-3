@@ -234,7 +234,7 @@
                          :address (get order :address)
                          :rackids cooling-rack-ids})))))
 
-(defn perform [step]
+(defn perform [ingredients step]
   (let [operation (first step)]
     (cond
       (= :cool operation)
@@ -247,11 +247,31 @@
       (robot/pour-bowl (second step) (get step 2))
 
       (= :bake operation)
-      (robot/bake-pan (second step)))))
+      (robot/bake-pan (second step))
+
+      (= :add operation)
+      (cond
+        (= :all (second step))
+        (doseq [ingredient-pair ingredients]
+          (let [ingredient (key ingredient-pair)
+                amount     (val ingredient-pair)]
+            (add ingredient amount)))
+
+        (= 2 (count step))
+        (add (second step) (get ingredients (second step)))
+
+        (= 3 (count step))
+        (add (second step) (get step 2))))))
 
 (comment
 
-  (perform [:cool])
-  (perform [:mix :dry])
-  (perform [:pour :wet :dry])
-  (perform [:bake 45]))
+  (perform {} [:cool])
+  (perform {} [:mix :dry])
+  (perform {} [:pour :wet :dry])
+  (perform {} [:bake 45])
+
+  (robot/start-over)
+  (perform cake-ingredients [:add :all])
+  (perform cake-ingredients [:add :flour])
+  (perform cake-ingredients [:add :flour 3])
+  (robot/status))
