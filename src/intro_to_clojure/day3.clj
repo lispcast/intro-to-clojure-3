@@ -122,12 +122,6 @@
                                                       (robot/error "I don't know how to add" ingredient)))]
      (add-function ingredient quantity))))
 
-(comment
-
-  (add :flour)
-  (add :fdsfsdfs)
-  (robot/status))
-
 (defn fetch-ingredient
   ([ingredient]
    (fetch-ingredient ingredient 1))
@@ -138,11 +132,6 @@
    (robot/go-to :prep-area)
    (dotimes [_ amount]
      (robot/unload ingredient))))
-
-(comment
-  (robot/start-over)
-  (fetch-ingredient :flour 10)
-  (robot/status))
 
 (defn fetch-ingredients [ingredient-list]
   (doseq [location [:pantry :fridge]]
@@ -159,9 +148,6 @@
           _ (range quantity)]
     (robot/unload ingredient)))
 
-(comment
-  (fetch-ingredients (get-in database [:recipes :cookies :ingredients])))
-
 (defn add-ingredients [list1 list2]
   (merge-with + list1 list2))
 
@@ -175,43 +161,27 @@
                  (multiply-ingredients quantity (get-in database [:recipes item :ingredients])))
                (:items order))))
 
-;; -> ->>
-
-(comment
-
-  (order->ingredients {:orderid 6864, :address "543 Servo St", :items {:cake 18, :cookies 10}}))
-
 (defn orders->ingredients [orders]
   (reduce add-ingredients {} (map order->ingredients orders)))
 
+(def perform-functions {:cool (fn [_ingredients _ _]
+                                (robot/cool-pan))
+                        :mix (fn [_ingredients bowl _]
+                               (robot/mix-bowl bowl))
+                        :pour (fn [_ingredients from to]
+                                (robot/pour-bowl from to))
+                        :bake (fn [_ingredients time _]
+                                (robot/bake-pan time))
+                        :add (fn [ingredients ingredient quantity]
+                               (if (= :all ingredient)
+                                 (doseq [[ingredient amount] ingredients]
+                                   (add ingredient amount))
+                                 (add ingredient (or quantity (get ingredients ingredient)))))})
+
 (defn perform [ingredients step]
-  (let [operation (first step)]
-    (cond
-      (= :cool operation)
-      (robot/cool-pan)
-
-      (= :mix operation)
-      (robot/mix-bowl (second step))
-
-      (= :pour operation)
-      (robot/pour-bowl (second step) (get step 2))
-
-      (= :bake operation)
-      (robot/bake-pan (second step))
-
-      (= :add operation)
-      (cond
-        (= :all (second step))
-        (doseq [ingredient-pair ingredients]
-          (let [ingredient (key ingredient-pair)
-                amount     (val ingredient-pair)]
-            (add ingredient amount)))
-
-        (= 2 (count step))
-        (add (second step) (get ingredients (second step)))
-
-        (= 3 (count step))
-        (add (second step) (get step 2))))))
+  (let [operation (first step)
+        perform-function (get perform-functions operation)]
+    (perform-function ingredients (second step) (get step 2))))
 
 (defn bake-recipe [recipe]
   (let [ingredients (:ingredients recipe)
@@ -229,25 +199,6 @@
                                               (bake-recipe (get-in database [:recipes item])))
                                             (range quantity)))
                                      items)]
-        (prn cooling-rack-ids)
         (robot/delivery {:orderid (:orderid order)
                          :address (:address order)
                          :rackids cooling-rack-ids})))))
-
-(comment
-  (day-at-the-bakery)
-
-  (map range [1 2 3])
-  (mapcat range [1 2 3]))
-
-(comment
-
-  (perform {} [:cool])
-  (perform {} [:mix :dry])
-  (perform {} [:pour :wet :dry])
-  (perform {} [:bake 45])
-
-  (robot/start-over)
-
-  (bake-recipe (get-in database [:recipes :cookies]))
-  (robot/status))
