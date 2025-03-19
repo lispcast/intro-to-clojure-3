@@ -203,9 +203,17 @@
   (update-vals ingredient-list (fn [x] (* quantity x))))
 
 (defn order->ingredients [order]
-  (add-ingredients
-   (multiply-ingredients (get (get order :items) :cake 0) cake-ingredients)
-   (multiply-ingredients (get (get order :items) :cookies 0) cookie-ingredients)))
+  (reduce add-ingredients
+          {}
+          (map (fn [[item quantity]]
+                 (multiply-ingredients quantity (get-in database [:recipes item :ingredients])))
+               (:items order))))
+
+;; -> ->>
+
+(comment
+
+  (order->ingredients {:orderid 6864, :address "543 Servo St", :items {:cake 18, :cookies 10}}))
 
 (defn orders->ingredients [orders]
   (reduce add-ingredients {} (map order->ingredients orders)))
@@ -274,9 +282,6 @@
   (perform {} [:bake 45])
 
   (robot/start-over)
-  (perform cake-ingredients [:add :all])
-  (perform cake-ingredients [:add :flour])
-  (perform cake-ingredients [:add :flour 3])
 
   (bake-recipe (get-in database [:recipes :cookies]))
   (robot/status))
