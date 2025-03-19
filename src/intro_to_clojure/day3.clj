@@ -59,19 +59,19 @@
                :ingredients {:flour         {:location :pantry
                                              :add-method :scooped
                                              :bowl :dry}
-                             :sugar         {:location :panty
+                             :sugar         {:location :pantry
                                              :add-method :scooped
                                              :bowl :wet}
-                             :corn-starch   {:location :panty
+                             :corn-starch   {:location :pantry
                                              :add-method :scooped
                                              :bowl :dry}
-                             :baking-powder {:location :panty
+                             :baking-powder {:location :pantry
                                              :add-method :scooped
                                              :bowl :dry}
-                             :cocoa         {:location :panty
+                             :cocoa         {:location :pantry
                                              :add-method :scooped
                                              :bowl :wet}
-                             :coconut-oil   {:location :panty
+                             :coconut-oil   {:location :pantry
                                              :add-method :scooped
                                              :bowl :wet}
                              :almond-milk   {:location :fridge
@@ -81,56 +81,31 @@
                                              :add-method :squeezed
                                              :bowl :wet}}})
 
-(def pantry-ingredients #{:flour
-                          :sugar
-                          :corn-starch
-                          :baking-powder
-                          :cocoa
-                          :coconut-oil})
-
 (defn from-pantry? [ingredient]
-  (contains? pantry-ingredients ingredient))
+  (= :pantry (get-in database [:ingredients ingredient :location])))
 
-(def fridge-ingredients #{:almond-milk
-                          :lemon})
+(comment
+
+  (from-pantry? :flour))
 
 (defn from-fridge? [ingredient]
-  (contains? fridge-ingredients ingredient))
-
-(def scooped-ingredients #{:flour
-                           :almond-milk
-                           :sugar
-                           :coconut-oil
-                           :baking-powder
-                           :cocoa
-                           :corn-starch})
+  (= :fridge (get-in database [:ingredients ingredient :location])))
 
 (defn scooped? [ingredient]
-  (contains? scooped-ingredients ingredient))
+  (= :scooped (get-in database [:ingredients ingredient :add-method])))
 
 (comment
 
   (from-pantry? :cocoa)
   (scooped? :cocoa))
 
-(def squeezed-ingredients #{:lemon})
-
 (defn squeezed? [ingredient]
-  (contains? squeezed-ingredients ingredient))
-
-(def wet-ingredients #{:almond-milk :sugar :coconut-oil :lemon-juice :cocoa})
-(def dry-ingredients #{:flour :corn-starch :baking-powder})
+  (= :squeezed (get-in database [:ingredients ingredient :add-method])))
 
 (defn bowl-for [ingredient]
-  (cond
-    (contains? wet-ingredients ingredient)
-    :wet
-
-    (contains? dry-ingredients ingredient)
-    :dry
-
-    :else
-    (robot/error "I don't recognize" ingredient)))
+  (or
+   (get-in database [:ingredients ingredient :bowl])
+   (robot/error "I don't recognize" ingredient)))
 
 (comment
   (bowl-for :cocoa))
