@@ -81,30 +81,16 @@
                                              :add-method :squeezed
                                              :bowl :wet}}})
 
-(comment)
-
-(defn scooped? [ingredient]
-  (= :scooped (get-in database [:ingredients ingredient :add-method])))
-
-(comment
-  (scooped? :cocoa))
-
-(defn squeezed? [ingredient]
-  (= :squeezed (get-in database [:ingredients ingredient :add-method])))
-
 (defn bowl-for [ingredient]
   (or
    (get-in database [:ingredients ingredient :bowl])
    (robot/error "I don't recognize" ingredient)))
 
-(comment
-  (bowl-for :cocoa))
-
 (defn add-squeezed
   ([ingredient]
    (add-squeezed ingredient 1))
   ([ingredient quantity]
-   (if (squeezed? ingredient)
+   (if (= :squeezed (get-in database [:ingredients ingredient :add-method]))
      (dotimes [_ quantity]
        (robot/grab ingredient)
        (robot/squeeze (bowl-for ingredient))
@@ -115,7 +101,7 @@
   ([ingredient]
    (add-scooped ingredient 1))
   ([ingredient quantity]
-   (if (scooped? ingredient)
+   (if (= :scooped (get-in database [:ingredients ingredient :add-method]))
      (do
        (robot/grab :cup)
        (dotimes [_ quantity]
@@ -124,19 +110,23 @@
        (robot/release))
      (robot/error ingredient "is not scooped"))))
 
+(def add-functions {:scooped  add-scooped
+                    :squeezed add-squeezed})
+
 (defn add
   ([ingredient]
    (add ingredient 1))
   ([ingredient quantity]
-   (cond
-     (squeezed? ingredient)
-     (add-squeezed ingredient quantity)
+   (let [add-method (get-in database [:ingredients ingredient :add-method])
+         add-function (get add-functions add-method (fn [ingredient _quantity]
+                                                      (robot/error "I don't know how to add" ingredient)))]
+     (add-function ingredient quantity))))
 
-     (scooped? ingredient)
-     (add-scooped ingredient quantity)
+(comment
 
-     :else
-     (robot/error "I don't know how to add" ingredient))))
+  (add :flour)
+  (add :fdsfsdfs)
+  (robot/status))
 
 (defn fetch-ingredient
   ([ingredient]
