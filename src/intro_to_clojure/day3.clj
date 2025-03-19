@@ -81,22 +81,12 @@
                                              :add-method :squeezed
                                              :bowl :wet}}})
 
-(defn from-pantry? [ingredient]
-  (= :pantry (get-in database [:ingredients ingredient :location])))
-
-(comment
-
-  (from-pantry? :flour))
-
-(defn from-fridge? [ingredient]
-  (= :fridge (get-in database [:ingredients ingredient :location])))
+(comment)
 
 (defn scooped? [ingredient]
   (= :scooped (get-in database [:ingredients ingredient :add-method])))
 
 (comment
-
-  (from-pantry? :cocoa)
   (scooped? :cocoa))
 
 (defn squeezed? [ingredient]
@@ -159,35 +149,28 @@
    (dotimes [_ amount]
      (robot/unload ingredient))))
 
-(defn fetch-ingredients [ingredient-list]
-  ;; go to pantry
-  (robot/go-to :pantry)
-  ;; load up everything
-  (doseq [ingredient-pair ingredient-list
-          :let [ingredient-name (get ingredient-pair 0)
-                ingredient-quantity (get ingredient-pair 1)]]
-    (when (from-pantry? ingredient-name)
-      (dotimes [_ ingredient-quantity]
-        (robot/load-up ingredient-name))))
+(comment
+  (robot/start-over)
+  (fetch-ingredient :flour 10)
+  (robot/status))
 
-  ;; go to fridge
-  (robot/go-to :fridge)
-  ;; load up everything
-  (doseq [ingredient-pair ingredient-list
-          :let [ingredient-name (get ingredient-pair 0)
-                ingredient-quantity (get ingredient-pair 1)]]
-    (when (from-fridge? ingredient-name)
-      (dotimes [_ ingredient-quantity]
-        (robot/load-up ingredient-name))))
+(defn fetch-ingredients [ingredient-list]
+  (doseq [location [:pantry :fridge]]
+    (robot/go-to location)
+    (doseq [[ingredient quantity] ingredient-list
+            :when (= location (get-in database [:ingredients ingredient :location]))
+            _ (range quantity)]
+      (robot/load-up ingredient)))
 
   ;; go to prep area
   (robot/go-to :prep-area)
   ;; unload everything
-  (doseq [ingredient-pair ingredient-list
-          :let [ingredient-name (get ingredient-pair 0)
-                ingredient-quantity (get ingredient-pair 1)]]
-    (dotimes [_ ingredient-quantity]
-      (robot/unload ingredient-name))))
+  (doseq [[ingredient quantity] ingredient-list
+          _ (range quantity)]
+    (robot/unload ingredient)))
+
+(comment
+  (fetch-ingredients (get-in database [:recipes :cookies :ingredients])))
 
 (defn add-ingredients [list1 list2]
   (merge-with + list1 list2))
