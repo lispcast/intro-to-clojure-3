@@ -1,85 +1,15 @@
 (ns intro-to-clojure.day3
-  (:require [bakery.robot :as robot]))
+  (:require [bakery.robot :as robot]
+            [clojure.edn :as edn]
+            [clojure.pprint :as pprint]))
 
-(def database {:recipes {:cake {:ingredients {:flour 2
-                                              :baking-powder 1
-                                              :almond-milk 1
-                                              :sugar 1}
-                                :steps [[:add :flour]
-                                        [:add :baking-powder]
-                                        [:add :almond-milk]
-                                        [:add :sugar]
+(def database (edn/read-string (slurp "bakery.edn")))
 
-                                        [:mix :dry]
-                                        [:mix :wet]
-                                        [:pour :wet :dry]
-                                        [:mix :dry]
-                                        [:pour :dry :pan]
-                                        [:bake 25]
+(comment
 
-                                        [:cool]]}
+  (spit "bakery2.edn" (pr-str database))
 
-                         :cookies {:ingredients {:flour 1
-                                                 :corn-starch 1
-                                                 :sugar 1
-                                                 :coconut-oil 1}
-                                   :steps [[:add :flour]
-                                           [:add :corn-starch]
-                                           [:add :sugar]
-                                           [:add :coconut-oil]
-
-                                           [:mix :dry]
-                                           [:mix :wet]
-                                           [:pour :wet :dry]
-                                           [:mix :dry]
-                                           [:pour :dry :pan]
-                                           [:bake 30]
-
-                                           [:cool]]}
-
-                         :brownies {:ingredients {:coconut-oil 2
-                                                  :cocoa 2
-                                                  :sugar 1
-                                                  :almond-milk 1
-                                                  :flour 2}
-                                    :steps [[:add :coconut-oil]
-                                            [:add :cocoa]
-                                            [:add :sugar]
-                                            [:mix :wet]
-
-                                            [:add :almond-milk]
-                                            [:mix :wet]
-
-                                            [:add :flour]
-                                            [:pour :wet :dry]
-                                            [:mix :dry]
-                                            [:pour :dry :pan]
-                                            [:bake 35]
-                                            [:cool]]}}
-               :ingredients {:flour         {:location :pantry
-                                             :add-method :scooped
-                                             :bowl :dry}
-                             :sugar         {:location :pantry
-                                             :add-method :scooped
-                                             :bowl :wet}
-                             :corn-starch   {:location :pantry
-                                             :add-method :scooped
-                                             :bowl :dry}
-                             :baking-powder {:location :pantry
-                                             :add-method :scooped
-                                             :bowl :dry}
-                             :cocoa         {:location :pantry
-                                             :add-method :scooped
-                                             :bowl :wet}
-                             :coconut-oil   {:location :pantry
-                                             :add-method :scooped
-                                             :bowl :wet}
-                             :almond-milk   {:location :fridge
-                                             :add-method :scooped
-                                             :bowl :wet}
-                             :lemon         {:location :fridge
-                                             :add-method :squeezed
-                                             :bowl :wet}}})
+  (spit "bakery2.edn" (with-out-str (pprint/pprint database))))
 
 (defn bowl-for [ingredient]
   (or
