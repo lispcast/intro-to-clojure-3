@@ -55,7 +55,31 @@
                                             [:mix :dry]
                                             [:pour :dry :pan]
                                             [:bake 35]
-                                            [:cool]]}}})
+                                            [:cool]]}}
+               :ingredients {:flour         {:location :pantry
+                                             :add-method :scooped
+                                             :bowl :dry}
+                             :sugar         {:location :panty
+                                             :add-method :scooped
+                                             :bowl :wet}
+                             :corn-starch   {:location :panty
+                                             :add-method :scooped
+                                             :bowl :dry}
+                             :baking-powder {:location :panty
+                                             :add-method :scooped
+                                             :bowl :dry}
+                             :cocoa         {:location :panty
+                                             :add-method :scooped
+                                             :bowl :wet}
+                             :coconut-oil   {:location :panty
+                                             :add-method :scooped
+                                             :bowl :wet}
+                             :almond-milk   {:location :fridge
+                                             :add-method :scooped
+                                             :bowl :wet}
+                             :lemon         {:location :fridge
+                                             :add-method :squeezed
+                                             :bowl :wet}}})
 
 (def pantry-ingredients #{:flour
                           :sugar
