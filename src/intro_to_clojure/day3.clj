@@ -152,13 +152,7 @@
   ([ingredient]
    (fetch-ingredient ingredient 1))
   ([ingredient amount]
-   (cond
-     (from-pantry? ingredient)
-     (robot/go-to :pantry)
-     (from-fridge? ingredient)
-     (robot/go-to :fridge)
-     :else
-     (robot/error "I don't know where to find" ingredient))
+   (robot/go-to (get-in database [:ingredients ingredient :location]))
    (dotimes [_ amount]
      (robot/load-up ingredient))
    (robot/go-to :prep-area)
