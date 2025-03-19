@@ -85,14 +85,15 @@
   (update-vals ingredient-list (fn [x] (* quantity x))))
 
 (defn order->ingredients [order]
-  (reduce add-ingredients
-          {}
-          (map (fn [[item quantity]]
-                 (multiply-ingredients quantity (get-in database [:recipes item :ingredients])))
-               (:items order))))
+  (->> (:items order)
+       (map (fn [[item quantity]]
+              (multiply-ingredients quantity (get-in database [:recipes item :ingredients]))))
+       (reduce add-ingredients {})))
 
 (defn orders->ingredients [orders]
-  (reduce add-ingredients {} (map order->ingredients orders)))
+  (->> orders
+       (map order->ingredients)
+       (reduce add-ingredients {})))
 
 (def perform-functions {:cool (fn [_ingredients _ _]
                                 (robot/cool-pan))
@@ -123,12 +124,14 @@
         ingredients (orders->ingredients orders)]
     (fetch-ingredients ingredients)
     (doseq [order orders]
-      (let [items (:items order)
-            cooling-rack-ids (mapcat (fn [[item quantity]]
-                                       (map (fn [_]
-                                              (bake-recipe (get-in database [:recipes item])))
-                                            (range quantity)))
-                                     items)]
+      (let [cooling-rack-ids (->> (:items order)
+                                  (mapcat (fn [[item quantity]] (repeat quantity item)))
+                                  (map (fn [item] (bake-recipe (get-in database [:recipes item])))))]
         (robot/delivery {:orderid (:orderid order)
                          :address (:address order)
                          :rackids cooling-rack-ids})))))
+
+(comment
+  (->> {:cake 4 :cookies 3}
+       (mapcat (fn [[item quantity]] (repeat quantity item)))
+       (map (fn [item] (bake-recipe (get-in database [:recipes item]))))))
