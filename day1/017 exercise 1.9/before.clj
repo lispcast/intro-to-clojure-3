@@ -64,10 +64,10 @@
 (defn add [ingredient]
   (cond
     (squeezed? ingredient)
-    (add-squeezed ingredient)
+    (add-squeezed ingredient (bowl-for ingredient))
 
     (scooped? ingredient)
-    (add-scooped ingredient)
+    (add-scooped ingredient (bowl-for ingredient))
 
     :else
     (error "I don't know how to add" ingredient)))
