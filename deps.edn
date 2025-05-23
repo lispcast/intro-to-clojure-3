@@ -1,6 +1,6 @@
 {:deps {org.clojure/clojure {:mvn/version "1.12.0"}
         lispcast/bakery2 {:git/url "https://github.com/lispcast/bakery2"
-                          :git/sha "2b2dec989bbad9b50899b540355352440b8ae3fc"}}
+                          :git/sha "230d7f4336ee52f9a5b14cd167fb420468bbd1bf"}}
  :aliases {:repl {:extra-deps {com.bhauman/rebel-readline {:mvn/version "0.1.4"}}
                   :extra-paths ["dev"]
                   :main-opts  ["-m" "repl"]}}}
